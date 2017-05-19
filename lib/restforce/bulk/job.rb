@@ -11,12 +11,12 @@ module Restforce
       }
 
       class << self
-        def create(operation, object_name, concurrency=:Parallel content_type=:xml)
+        def create(operation, object_name, concurrency=:Parallel, content_type=:xml)
           builder  = Restforce::Bulk::Builder::Xml.new(operation)
           data     = builder.job(object_name,
                                  concurrency.capitalize,
                                  JOB_CONTENT_TYPE_MAPPING[content_type.to_sym])
-
+          
           response = Restforce::Bulk.client.perform_request(:post, 'job', data)
 
           new(response.body.jobInfo)
